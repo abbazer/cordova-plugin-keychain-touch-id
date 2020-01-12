@@ -14,8 +14,6 @@
  * limitations under the License
  */
 
-package com.cordova.plugin.android.fingerprintauth;
-
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.hardware.fingerprint.FingerprintManager;

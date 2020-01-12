@@ -14,9 +14,6 @@
  * limitations under the License
  */
 
-package com.cordova.plugin.android.fingerprintauth;
-
-import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.KeyguardManager;
 import android.content.Context;
@@ -34,8 +31,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.apache.cordova.CordovaInterface;
 
 /**
  * A dialog which uses fingerprint APIs to authenticate the user, and falls back to password
@@ -55,7 +50,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     private KeyguardManager mKeyguardManager;
     private FingerprintManager.CryptoObject mCryptoObject;
     private FingerprintUiHelper mFingerprintUiHelper;
-    private FingerprintAuthAux mFingerPrintAuth;
+    private FingerprintAuth mFingerPrintAuth;
     FingerprintUiHelper.FingerprintUiHelperBuilder mFingerprintUiHelperBuilder;
 
     public FingerprintAuthenticationDialogFragment() {
@@ -102,7 +97,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
             @Override
             public void onClick(View view) {
                 FingerprintAuth.onCancelled();
-                dismissAllowingStateLoss();
+                dismiss();
             }
         });
 
@@ -183,14 +178,14 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_CONFIRM_DEVICE_CREDENTIALS) {
             // Challenge completed, proceed with using cipher
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == getActivity().RESULT_OK) {
                 mFingerPrintAuth.onAuthenticated(false /* used backup */);
             } else {
                 // The user canceled or didn’t complete the lock screen
                 // operation. Go to error/cancellation flow.
                 FingerprintAuth.onCancelled();
             }
-            dismissAllowingStateLoss();
+            dismiss();
         }
     }
 
@@ -199,7 +194,7 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         // Callback from FingerprintUiHelper. Let the activity know that authentication was
         // successful.
         mFingerPrintAuth.onAuthenticated(true /* withFingerprint */);
-        dismissAllowingStateLoss();
+        dismiss();
     }
 
     @Override
@@ -213,11 +208,11 @@ public class FingerprintAuthenticationDialogFragment extends DialogFragment
         FingerprintAuth.onCancelled();
     }
 
-    public FingerprintAuthAux getmFingerPrintAuth() {
+    public FingerprintAuth getmFingerPrintAuth() {
         return mFingerPrintAuth;
     }
 
-    public void setmFingerPrintAuth(FingerprintAuthAux mFingerPrintAuth) {
+    public void setmFingerPrintAuth(FingerprintAuth mFingerPrintAuth) {
         this.mFingerPrintAuth = mFingerPrintAuth;
     }
 
